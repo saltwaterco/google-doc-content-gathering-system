@@ -1,0 +1,70 @@
+# =============================================================
+#  WordPress .gitignore
+#  Tracks custom code; ignores core, secrets, uploads & cruft.
+# =============================================================
+
+# --- Secrets & machine-specific config ---
+wp-config.php
+wp-config-local.php
+.env
+.env.*
+!.env.example
+
+# --- WordPress core ---
+# Core is managed via install/Composer/wp-cli, not versioned.
+/wp-admin/
+/wp-includes/
+/wp-*.php
+/index.php
+/xmlrpc.php
+/license.txt
+/readme.html
+# Re-track the sample config so new instances can bootstrap.
+!/wp-config-sample.php
+
+# --- Content directory ---
+# Track all CODE in wp-content (themes, custom scripts, plugins) but
+# exclude user media/uploads, caches, logs, and backup artifacts.
+/wp-content/uploads/
+/wp-content/upgrade/
+/wp-content/cache/
+/wp-content/wflogs/
+/wp-content/backup*/
+/wp-content/ai1wm-backups/
+/wp-content/blogs.dir/
+/wp-content/advanced-cache.php
+/wp-content/wp-cache-config.php
+/wp-content/debug.log
+/wp-content/*.log
+
+# Build artifacts inside themes/plugins (still ignored):
+/wp-content/themes/*/node_modules/
+/wp-content/themes/*/vendor/
+/wp-content/plugins/*/node_modules/
+/wp-content/plugins/*/vendor/
+
+# --- Dependencies & build artifacts ---
+node_modules/
+vendor/
+/dist/
+/build/
+*.min.js.map
+*.min.css.map
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+._*
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# --- Local dev tooling ---
+.phpunit.result.cache
+.php-cs-fixer.cache
+*.sql
+*.sql.gz
