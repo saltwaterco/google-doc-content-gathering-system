@@ -1,0 +1,6 @@
+vendor/
+.env
+*.json
+!composer.json
+*.docx
+out/
