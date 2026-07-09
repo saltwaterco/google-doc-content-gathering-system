@@ -24,7 +24,7 @@ Run the walker on the original Google Doc and keep its output file:
 cd spike
 php walk_doc.php <DOC_ID>
 # writes out/<Doc Title>.blocks.json  — rename it so it won't be overwritten:
-mv "out/<Doc Title>.blocks.json" "out/<Doc Title>.BEFORE.blocks.json"
+mv "out/WuXi_Biology_Page_Template_Text_Only_Testing.blocks.json" "out/WuXi_Biology_Page_Template_Text_Only_Testing.BEFORE.blocks.json"
 ```
 
 ### 2. Export to .docx (Google side)
@@ -37,13 +37,22 @@ document's internal structure, and it's where our fragile spots (cell paragraph
 splitting, lists, links) are most likely to change. Optionally make a small edit like
 a real writer would, to mimic the workflow.
 
-### 4. Re-import to Google Docs
-Upload the saved `.docx` back to Drive, then open it **as a Google Doc**:
-- In Drive: right-click the uploaded file → **Open with → Google Docs**, OR
-- upload with conversion so it becomes a native Google Doc (not a stored .docx).
+### 4. Re-import to Google Docs (must become a NATIVE Google Doc)
+The tool reads via the Docs API, which rejects stored `.docx` files
+(`400 FAILED_PRECONDITION: "must not be an Office file"`). So the re-imported file has
+to be a native Google Doc, not a parked Word file. Reliable ways:
+
+- **Best / scalable:** enable **Drive Settings → General → "Convert uploads"** once
+  (see SETUP.md step 5b), then just upload the `.docx` — it converts on arrival. This is
+  also how bulk client uploads work.
+- **One-off, if the setting is off:** open the uploaded file and use **File → Open**
+  *from inside Google Docs* to force a converted copy. (Note: "Open with → Google Docs"
+  from Drive's right-click menu may edit the Office file in place instead of converting —
+  don't rely on it.)
 
 Put the resulting Google Doc in your shared folder so the service account can read it,
-and note its new DOC_ID (run `php list_docs.php` if needed).
+and note its new DOC_ID. Run `php list_docs.php` to confirm it appears — if it doesn't,
+it's still a Word file and wasn't converted.
 
 ### 5. Capture the AFTER model
 ```sh

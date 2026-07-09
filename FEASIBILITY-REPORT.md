@@ -97,6 +97,13 @@ specific human user.
 7. **Shared that folder with the service account's email** (Viewer access) — this is how
    the tool is granted access, exactly like sharing with a coworker.
 8. Recorded the **folder ID** (from the Drive URL) for the tool's config.
+9. **Enabled "Convert uploads"** (Drive → Settings → General → "Convert uploaded files to
+   Google Docs editor format"). This is **required**: the tool reads via the Docs API,
+   which only works on native Google Docs, not stored `.docx` files. With this on, Word
+   files (including bulk/multi-select uploads) auto-convert to Google Docs on arrival —
+   this is how ~100 client Word docs get ingested without per-file manual conversion.
+   *Note:* it's a per-account setting, so it must be enabled on whichever account uploads
+   the files (e.g. the client's, if they upload into their own Drive and share).
 
 ### D. The Word round-trip test (Question 3)
 Performed manually, once, to measure fidelity:

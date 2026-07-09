@@ -67,6 +67,29 @@ read a document's structure.)
 4. Get the **folder ID**: open the folder in Drive; the URL is
    `https://drive.google.com/drive/folders/XXXXXXXXXXXX` — the `XXXX` part is the ID.
 
+## 5b. REQUIRED: turn on "Convert uploads" so Word files become Google Docs
+
+The tool reads via the Google **Docs API**, which only works on **native Google Docs** —
+NOT stored `.docx` files. If a Word file is uploaded without conversion, the tool fails
+with `400 FAILED_PRECONDITION: "The document must not be an Office file."` and
+`list_docs.php` won't even show it (it lists native Google Docs only).
+
+To make uploaded `.docx` files convert automatically:
+
+1. In Google Drive, click **⚙ (gear, top-right) → Settings → General**.
+2. Find **"Convert uploads"** and check **"Convert uploaded files to Google Docs
+   editor format."**
+
+Now any `.docx` uploaded to Drive (single or bulk/multi-select) becomes a native Google
+Doc on arrival — no per-file "Open with" step needed. This is how ~100 client Word docs
+get ingested at once.
+
+> **Important — it's a per-account setting.** It applies to the account *doing the
+> uploading*. If the client uploads into their own Drive and shares the folder, the
+> setting must be enabled on **their** account. It also only affects uploads made
+> *after* it's turned on; a file already sitting there as Word won't retro-convert
+> (open it, then **File → Open** inside Google Docs to force a converted copy).
+
 ## 6. Point the spike at your credentials
 
 Copy `.env.example` to `.env` in this `spike/` folder and fill it in:
@@ -96,6 +119,11 @@ php walk_doc.php <DOC_ID>  # Question 2: walk one doc's structure
 
 - **403 `insufficientPermissions` / file not found when listing** — the folder isn't
   shared with the service account email, or you shared a different folder. Re-check step 5.
+- **400 `FAILED_PRECONDITION` "The document must not be an Office file"** — the DOC_ID
+  points at a stored `.docx`, not a native Google Doc. Turn on "Convert uploads"
+  (step 5b) and re-upload, or open the file and use **File → Open** inside Google Docs to
+  create a converted copy. A converted doc has a *different* ID — get the new one from
+  `list_docs.php` (which lists native Google Docs only; Word files won't appear).
 - **403 `SERVICE_DISABLED`** — an API isn't enabled on the *selected* project (step 2).
 - **`invalid_grant` / clock errors** — your machine clock is skewed; JWT auth is
   time-sensitive. Sync your system time.
