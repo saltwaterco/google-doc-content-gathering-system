@@ -113,6 +113,10 @@ php walk_doc.php <DOC_ID>  # Question 2: walk one doc's structure
 
 `<DOC_ID>` is any document ID printed by `list_docs.php`.
 
+> This file covers the **Google Docs** side (reading docs → block model). For the
+> **WordPress / Elementor** side — creating pages, sitemap placement, and rendering
+> blocks from doc content — see **`WORDPRESS.md`**.
+
 ---
 
 ## Troubleshooting
